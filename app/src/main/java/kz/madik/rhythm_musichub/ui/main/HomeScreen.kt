@@ -123,6 +123,7 @@ fun HomeScreen(
                         putExtra("track_title", track.title)
                         putExtra("track_artist", track.artist)
                         putExtra("cover_url", track.coverUrl)
+                        putExtra("track_duration", track.duration)
                     }
                     context.startActivity(intent)
                 },

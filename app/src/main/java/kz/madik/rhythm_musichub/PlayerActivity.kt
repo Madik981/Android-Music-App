@@ -22,6 +22,7 @@ class PlayerActivity : ComponentActivity() {
         val trackTitle = intent.getStringExtra("track_title") ?: "Demo Track"
         val trackArtist = intent.getStringExtra("track_artist") ?: "Unknown Artist"
         val coverUrl = intent.getStringExtra("cover_url")
+        val trackDuration = intent.getLongExtra("track_duration", 180L)
 
         player = ExoPlayer.Builder(this).build().apply {
             setMediaItem(MediaItem.fromUri(audioUrl))
@@ -35,7 +36,9 @@ class PlayerActivity : ComponentActivity() {
                     onBack = { finish() },
                     trackTitle = trackTitle,
                     trackArtist = trackArtist,
-                    coverUrl = coverUrl
+                    coverUrl = coverUrl,
+                    trackDuration = trackDuration.toInt(),
+                    player = player
                 )
             }
         }
@@ -51,3 +54,4 @@ class PlayerActivity : ComponentActivity() {
         player.release()
     }
 }
+

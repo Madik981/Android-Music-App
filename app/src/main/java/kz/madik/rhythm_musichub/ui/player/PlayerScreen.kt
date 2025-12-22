@@ -18,7 +18,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.media3.exoplayer.ExoPlayer
 import coil.compose.AsyncImage
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import java.util.Locale
 
 @Composable
@@ -26,11 +29,26 @@ fun PlayerScreen(
     onBack: () -> Unit,
     trackTitle: String = "Demo Track",
     trackArtist: String = "Unknown Artist",
-    coverUrl: String? = null
+    coverUrl: String? = null,
+    trackDuration: Int = 180,
+    player: ExoPlayer? = null
 ) {
     var isPlaying by remember { mutableStateOf(true) }
     var isFavorite by remember { mutableStateOf(false) }
-    var currentProgress by remember { mutableStateOf(0.3f) }
+    var currentProgress by remember { mutableStateOf(0f) }
+    var currentPosition by remember { mutableStateOf(0) }
+
+    // Update progress from ExoPlayer
+    LaunchedEffect(player) {
+        while (isActive && player != null) {
+            currentPosition = (player.currentPosition / 1000).toInt()
+            currentProgress = if (trackDuration > 0) {
+                currentPosition.toFloat() / trackDuration.toFloat()
+            } else 0f
+            isPlaying = player.isPlaying
+            delay(100)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -44,6 +62,7 @@ fun PlayerScreen(
                     )
                 )
             )
+            .statusBarsPadding()
     ) {
         Column(
             modifier = Modifier
@@ -76,7 +95,7 @@ fun PlayerScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
             // Album Art
             AsyncImage(
@@ -132,7 +151,10 @@ fun PlayerScreen(
             Column(modifier = Modifier.fillMaxWidth()) {
                 Slider(
                     value = currentProgress,
-                    onValueChange = { currentProgress = it },
+                    onValueChange = { newProgress ->
+                        currentProgress = newProgress
+                        player?.seekTo((newProgress * trackDuration * 1000).toLong())
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = SliderDefaults.colors(
                         thumbColor = Color.White,
@@ -145,12 +167,12 @@ fun PlayerScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = formatTime((currentProgress * 180).toInt()),
+                        text = formatTime(currentPosition),
                         color = Color.Gray,
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
-                        text = "3:00",
+                        text = formatTime(trackDuration),
                         color = Color.Gray,
                         style = MaterialTheme.typography.bodySmall
                     )
@@ -184,7 +206,13 @@ fun PlayerScreen(
                 }
 
                 IconButton(
-                    onClick = { isPlaying = !isPlaying },
+                    onClick = {
+                        if (player?.isPlaying == true) {
+                            player.pause()
+                        } else {
+                            player?.play()
+                        }
+                    },
                     modifier = Modifier
                         .size(72.dp)
                         .background(Color.White, CircleShape)
@@ -224,3 +252,4 @@ private fun formatTime(seconds: Int): String {
     val secs = seconds % 60
     return String.format(Locale.getDefault(), "%d:%02d", mins, secs)
 }
+
