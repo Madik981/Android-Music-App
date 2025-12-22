@@ -19,6 +19,9 @@ class PlayerActivity : ComponentActivity() {
 
         val audioUrl = intent.getStringExtra("audio_url")
             ?: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        val trackTitle = intent.getStringExtra("track_title") ?: "Demo Track"
+        val trackArtist = intent.getStringExtra("track_artist") ?: "Unknown Artist"
+        val coverUrl = intent.getStringExtra("cover_url")
 
         player = ExoPlayer.Builder(this).build().apply {
             setMediaItem(MediaItem.fromUri(audioUrl))
@@ -29,7 +32,10 @@ class PlayerActivity : ComponentActivity() {
         setContent {
             Rhythm_MusicHubTheme {
                 PlayerScreen(
-                    onBack = { finish() }
+                    onBack = { finish() },
+                    trackTitle = trackTitle,
+                    trackArtist = trackArtist,
+                    coverUrl = coverUrl
                 )
             }
         }

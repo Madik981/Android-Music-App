@@ -1,85 +1,183 @@
 package kz.madik.rhythm_musichub.ui.main
 
-import androidx.compose.foundation.Image
+import android.content.Intent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
+import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 @Composable
-fun LibraryScreen(padding: PaddingValues) {
-    LazyColumn(
+fun LibraryScreen(
+    padding: PaddingValues,
+    viewModel: MusicViewModel,
+    @Suppress("UNUSED_PARAMETER") navController: NavController
+) {
+    val context = LocalContext.current
+    val favoriteTracks by viewModel.favoriteTracks.collectAsState()
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF121212))
             .padding(padding)
             .padding(16.dp)
     ) {
+        Text(
+            text = stringResource(R.string.library_title),
+            color = Color.White,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
 
-        item {
-            Text(
-                text = "Your Library",
-                color = Color.White,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-        items(libraryTracks) { track ->
-            LibraryTrackRow(track)
-        }
+        if (favoriteTracks.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.library_empty),
+                        color = Color.Gray,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.library_favorites),
+                        color = Color.Gray,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 80.dp)
+            ) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            tint = Color(0xFF1DB954)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = stringResource(R.string.library_favorites),
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
-        item {
-            Spacer(modifier = Modifier.height(80.dp))
+                items(favoriteTracks) { track ->
+                    LibraryTrackRow(
+                        track = track,
+                        onTrackClick = {
+                            val intent = Intent(context, PlayerActivity::class.java).apply {
+                                putExtra("audio_url", track.audioUrl)
+                                putExtra("track_title", track.title)
+                                putExtra("track_artist", track.artist)
+                                putExtra("cover_url", track.coverUrl)
+                            }
+                            context.startActivity(intent)
+                        },
+                        onFavoriteClick = { viewModel.toggleFavorite(track) }
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun LibraryTrackRow(track: Track) {
+fun LibraryTrackRow(
+    track: TrackEntity,
+    onTrackClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .clickable { onTrackClick() }
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        Image(
-            painter = painterResource(id = R.drawable.ic_music),
+        AsyncImage(
+            model = track.coverUrl,
             contentDescription = null,
-            modifier = Modifier.size(56.dp)
+            modifier = Modifier
+                .size(56.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = track.title,
                 color = Color.White,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = track.artist,
                 color = Color.Gray,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        IconButton(onClick = onFavoriteClick) {
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "Remove from favorites",
+                tint = Color(0xFF1DB954)
             )
         }
     }
 }
-
-private val libraryTracks = listOf(
-    Track("Blinding Lights", "The Weeknd"),
-    Track("Save Your Tears", "The Weeknd"),
-    Track("As It Was", "Harry Styles"),
-    Track("Levitating", "Dua Lipa")
-)

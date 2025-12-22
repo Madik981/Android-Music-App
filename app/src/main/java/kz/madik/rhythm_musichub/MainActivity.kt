@@ -11,10 +11,14 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import kz.madik.rhythm_musichub.ui.main.HomeScreen
 import kz.madik.rhythm_musichub.ui.main.LibraryScreen
 import kz.madik.rhythm_musichub.ui.main.SearchScreen
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
+import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +35,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MusicHubApp() {
     var selectedTab by remember { mutableIntStateOf(0) }
+    val navController = rememberNavController()
+    val viewModel: MusicViewModel = viewModel()
 
     Scaffold(
         containerColor = Color(0xFF121212),
         bottomBar = {
-            NavigationBar(containerColor = Color(0xFF121212)) {
+            NavigationBar(containerColor = Color(0xFF1E1E1E)) {
 
                 NavigationBarItem(
                     selected = selectedTab == 0,
@@ -43,7 +49,14 @@ fun MusicHubApp() {
                     icon = {
                         Icon(Icons.Filled.Home, contentDescription = "Home")
                     },
-                    label = { Text("Home") }
+                    label = { Text(stringResource(R.string.nav_home)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF1DB954),
+                        selectedTextColor = Color(0xFF1DB954),
+                        unselectedIconColor = Color.Gray,
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
+                    )
                 )
 
                 NavigationBarItem(
@@ -52,7 +65,14 @@ fun MusicHubApp() {
                     icon = {
                         Icon(Icons.Filled.Search, contentDescription = "Search")
                     },
-                    label = { Text("Search") }
+                    label = { Text(stringResource(R.string.nav_search)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF1DB954),
+                        selectedTextColor = Color(0xFF1DB954),
+                        unselectedIconColor = Color.Gray,
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
+                    )
                 )
 
                 NavigationBarItem(
@@ -61,15 +81,22 @@ fun MusicHubApp() {
                     icon = {
                         Icon(Icons.Filled.Favorite, contentDescription = "Library")
                     },
-                    label = { Text("Library") }
+                    label = { Text(stringResource(R.string.nav_library)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color(0xFF1DB954),
+                        selectedTextColor = Color(0xFF1DB954),
+                        unselectedIconColor = Color.Gray,
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
+                    )
                 )
             }
         }
     ) { innerPadding ->
         when (selectedTab) {
-            0 -> HomeScreen(innerPadding)
-            1 -> SearchScreen(innerPadding)
-            2 -> LibraryScreen(innerPadding)
+            0 -> HomeScreen(innerPadding, viewModel, navController)
+            1 -> SearchScreen(innerPadding, viewModel, navController)
+            2 -> LibraryScreen(innerPadding, viewModel, navController)
         }
     }
 }
