@@ -1,5 +1,6 @@
 package kz.madik.rhythm_musichub
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,12 +10,18 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import kz.madik.rhythm_musichub.ui.player.PlayerScreen
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
+import kz.madik.rhythm_musichub.utils.LocaleHelper
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 class PlayerActivity : ComponentActivity() {
 
     private lateinit var player: ExoPlayer
     private lateinit var viewModel: MusicViewModel
+
+    override fun attachBaseContext(newBase: Context) {
+        val languageCode = LocaleHelper.getLanguage(newBase)
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, languageCode))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

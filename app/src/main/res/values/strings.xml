@@ -13,6 +13,13 @@
     <string name="home_recently_played">Recently Played</string>
     <string name="home_recommended">Recommended for You</string>
     <string name="home_charts">Top Charts</string>
+    <string name="home_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Language</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_russian">Русский</string>
+    <string name="settings_language_kazakh">Қазақша</string>
 
     <!-- Search Screen -->
     <string name="search_title">Search</string>

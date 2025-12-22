@@ -13,6 +13,13 @@
     <string name="home_recently_played">Жақында тыңдалған</string>
     <string name="home_recommended">Сізге ұсынылған</string>
     <string name="home_charts">Топ чарттар</string>
+    <string name="home_settings">Баптаулар</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Тіл</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_russian">Русский</string>
+    <string name="settings_language_kazakh">Қазақша</string>
 
     <!-- Search Screen -->
     <string name="search_title">Іздеу</string>
@@ -44,4 +51,3 @@
     <string name="error_generic">Бірдеңе дұрыс болмады. Қайталап көріңіз.</string>
     <string name="retry">Қайталау</string>
 </resources>
-

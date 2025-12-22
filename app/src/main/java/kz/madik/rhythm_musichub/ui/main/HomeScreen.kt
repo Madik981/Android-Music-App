@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import coil.compose.AsyncImage
 import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
 import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.utils.LocaleHelper
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 import java.util.Calendar
 
@@ -41,6 +43,7 @@ fun HomeScreen(
     val chartTracks by viewModel.chartTracks.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    var showLanguageMenu by remember { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -51,12 +54,98 @@ fun HomeScreen(
     ) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = getGreeting(),
-                color = Color.White,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = getGreeting(),
+                    color = Color.White,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Box {
+                    IconButton(
+                        onClick = { showLanguageMenu = true },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.home_settings),
+                            tint = Color(0xFF1DB954)
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = showLanguageMenu,
+                        onDismissRequest = { showLanguageMenu = false },
+                        modifier = Modifier
+                            .background(Color(0xFF282828))
+                            .padding(4.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.settings_language),
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.settings_language_english),
+                                    color = Color.White
+                                )
+                            },
+                            onClick = {
+                                LocaleHelper.setLocale(context, "en")
+                                showLanguageMenu = false
+                                (context as? android.app.Activity)?.recreate()
+                            },
+                            colors = MenuDefaults.itemColors(
+                                textColor = Color.White
+                            )
+                        )
+
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.settings_language_russian),
+                                    color = Color.White
+                                )
+                            },
+                            onClick = {
+                                LocaleHelper.setLocale(context, "ru")
+                                showLanguageMenu = false
+                                (context as? android.app.Activity)?.recreate()
+                            },
+                            colors = MenuDefaults.itemColors(
+                                textColor = Color.White
+                            )
+                        )
+
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.settings_language_kazakh),
+                                    color = Color.White
+                                )
+                            },
+                            onClick = {
+                                LocaleHelper.setLocale(context, "kk")
+                                showLanguageMenu = false
+                                (context as? android.app.Activity)?.recreate()
+                            },
+                            colors = MenuDefaults.itemColors(
+                                textColor = Color.White
+                            )
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
         }
 

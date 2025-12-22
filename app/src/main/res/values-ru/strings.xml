@@ -13,6 +13,13 @@
     <string name="home_recently_played">Недавно прослушанное</string>
     <string name="home_recommended">Рекомендации для вас</string>
     <string name="home_charts">Топ чарты</string>
+    <string name="home_settings">Настройки</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_russian">Русский</string>
+    <string name="settings_language_kazakh">Қазақша</string>
 
     <!-- Search Screen -->
     <string name="search_title">Поиск</string>
@@ -44,4 +51,3 @@
     <string name="error_generic">Что-то пошло не так. Попробуйте снова.</string>
     <string name="retry">Повторить</string>
 </resources>
-
