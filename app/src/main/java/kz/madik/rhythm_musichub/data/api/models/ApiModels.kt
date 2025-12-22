@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TrackResponse(
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("title")
     val title: String,
     @SerializedName("artist")
@@ -14,27 +14,31 @@ data class TrackResponse(
     @SerializedName("duration")
     val duration: Int,
     @SerializedName("preview")
-    val preview: String,
-    @SerializedName("cover")
-    val cover: String?,
-    @SerializedName("cover_medium")
-    val coverMedium: String?
+    val preview: String
 )
 
 data class ArtistResponse(
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("name")
     val name: String
 )
 
 data class AlbumResponse(
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("title")
     val title: String,
     @SerializedName("cover")
-    val cover: String?
+    val cover: String?,
+    @SerializedName("cover_small")
+    val coverSmall: String?,
+    @SerializedName("cover_medium")
+    val coverMedium: String?,
+    @SerializedName("cover_big")
+    val coverBig: String?,
+    @SerializedName("cover_xl")
+    val coverXl: String?
 )
 
 data class SearchResponse(
@@ -53,4 +57,3 @@ data class TracksData(
     @SerializedName("data")
     val data: List<TrackResponse>
 )
-

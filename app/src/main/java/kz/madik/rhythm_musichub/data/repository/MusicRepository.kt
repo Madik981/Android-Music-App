@@ -53,8 +53,10 @@ class MusicRepository(
             album = this.album?.title,
             duration = this.duration.toLong(),
             audioUrl = this.preview,
-            coverUrl = this.coverMedium ?: this.cover
+            coverUrl = this.album?.coverMedium
+                ?: this.album?.coverBig
+                ?: this.album?.cover
+                ?: this.album?.coverSmall
         )
     }
 }
-
