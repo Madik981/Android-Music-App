@@ -11,9 +11,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import kz.madik.rhythm_musichub.ui.screens.HomeScreen
-import kz.madik.rhythm_musichub.ui.screens.LibraryScreen
-import kz.madik.rhythm_musichub.ui.screens.SearchScreen
+import kz.madik.rhythm_musichub.ui.main.HomeScreen
+import kz.madik.rhythm_musichub.ui.main.LibraryScreen
+import kz.madik.rhythm_musichub.ui.main.SearchScreen
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
 
 class MainActivity : ComponentActivity() {

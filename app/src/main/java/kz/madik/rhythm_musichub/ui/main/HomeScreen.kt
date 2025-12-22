@@ -1,4 +1,4 @@
-package kz.madik.rhythm_musichub.ui.screens
+package kz.madik.rhythm_musichub.ui.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
