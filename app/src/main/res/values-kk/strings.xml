@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Rhythm MusicHub</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Басты бет</string>
+    <string name="nav_search">Іздеу</string>
+    <string name="nav_library">Кітапхана</string>
+
+    <!-- Home Screen -->
+    <string name="home_greeting_morning">Қайырлы таң</string>
+    <string name="home_greeting_afternoon">Қайырлы күн</string>
+    <string name="home_greeting_evening">Қайырлы кеш</string>
+    <string name="home_recently_played">Жақында тыңдалған</string>
+    <string name="home_recommended">Сізге ұсынылған</string>
+    <string name="home_charts">Топ чарттар</string>
+
+    <!-- Search Screen -->
+    <string name="search_title">Іздеу</string>
+    <string name="search_hint">Не тыңдағыңыз келеді?</string>
+    <string name="search_no_results">Ештеңе табылмады</string>
+    <string name="search_browse_all">Барлығын шолу</string>
+
+    <!-- Library Screen -->
+    <string name="library_title">Сіздің кітапханаңыз</string>
+    <string name="library_playlists">Плейлистер</string>
+    <string name="library_favorites">Таңдаулылар</string>
+    <string name="library_artists">Орындаушылар</string>
+    <string name="library_albums">Альбомдар</string>
+    <string name="library_empty">Сіздің кітапханаңыз бос</string>
+
+    <!-- Player Screen -->
+    <string name="player_play">Ойнату</string>
+    <string name="player_pause">Кідірту</string>
+    <string name="player_next">Келесі</string>
+    <string name="player_previous">Алдыңғы</string>
+    <string name="player_shuffle">Араластыру</string>
+    <string name="player_repeat">Қайталау</string>
+    <string name="player_add_to_favorites">Таңдаулыларға қосу</string>
+    <string name="player_remove_from_favorites">Таңдаулылардан жою</string>
+
+    <!-- General -->
+    <string name="loading">Жүктелуде...</string>
+    <string name="error_network">Желі қатесі. Интернет байланысын тексеріңіз.</string>
+    <string name="error_generic">Бірдеңе дұрыс болмады. Қайталап көріңіз.</string>
+    <string name="retry">Қайталау</string>
+</resources>
+
