@@ -18,6 +18,8 @@ class MusicRepository(
 
     fun searchTracksLocal(query: String): Flow<List<TrackEntity>> = trackDao.searchTracks(query)
 
+    suspend fun getTrackById(trackId: String): TrackEntity? = trackDao.getTrackById(trackId)
+
     suspend fun insertTrack(track: TrackEntity) = trackDao.insertTrack(track)
 
     suspend fun updateFavorite(trackId: String, isFavorite: Boolean) =
@@ -45,9 +47,12 @@ class MusicRepository(
     }
 
     // Convert API model to Entity
-    fun TrackResponse.toEntity(): TrackEntity {
+    suspend fun TrackResponse.toEntity(): TrackEntity {
+        val trackId = this.id.toString()
+        val existingTrack = trackDao.getTrackById(trackId)
+
         return TrackEntity(
-            id = this.id.toString(),
+            id = trackId,
             title = this.title,
             artist = this.artist.name,
             album = this.album?.title,
@@ -56,7 +61,8 @@ class MusicRepository(
             coverUrl = this.album?.coverMedium
                 ?: this.album?.coverBig
                 ?: this.album?.cover
-                ?: this.album?.coverSmall
+                ?: this.album?.coverSmall,
+            isFavorite = existingTrack?.isFavorite ?: false
         )
     }
 }

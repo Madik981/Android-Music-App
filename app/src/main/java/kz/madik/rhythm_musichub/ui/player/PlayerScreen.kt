@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,19 +21,24 @@ import androidx.media3.exoplayer.ExoPlayer
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 import java.util.Locale
 
 @Composable
 fun PlayerScreen(
     onBack: () -> Unit,
+    trackId: String = "",
     trackTitle: String = "Demo Track",
     trackArtist: String = "Unknown Artist",
     coverUrl: String? = null,
     trackDuration: Int = 180,
-    player: ExoPlayer? = null
+    initialIsFavorite: Boolean = false,
+    player: ExoPlayer? = null,
+    viewModel: MusicViewModel? = null
 ) {
     var isPlaying by remember { mutableStateOf(true) }
-    var isFavorite by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(initialIsFavorite) }
     var currentProgress by remember { mutableStateOf(0f) }
     var currentPosition by remember { mutableStateOf(0) }
 
@@ -78,10 +82,10 @@ fun PlayerScreen(
             ) {
                 IconButton(onClick = onBack) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = "Back",
                         tint = Color.White,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(32.dp)
                     )
                 }
 
@@ -135,7 +139,20 @@ fun PlayerScreen(
                     )
                 }
 
-                IconButton(onClick = { isFavorite = !isFavorite }) {
+                IconButton(onClick = {
+                    val trackToToggle = TrackEntity(
+                        id = trackId,
+                        title = trackTitle,
+                        artist = trackArtist,
+                        album = null,
+                        duration = trackDuration.toLong(),
+                        audioUrl = player?.currentMediaItem?.localConfiguration?.uri?.toString() ?: "",
+                        coverUrl = coverUrl,
+                        isFavorite = isFavorite
+                    )
+                    viewModel?.toggleFavorite(trackToToggle)
+                    isFavorite = !isFavorite
+                }) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Favorite",
@@ -196,10 +213,12 @@ fun PlayerScreen(
                     )
                 }
 
-                IconButton(onClick = { /* Previous */ }) {
+                IconButton(onClick = {
+                    player?.seekTo(0)
+                }) {
                     Icon(
                         imageVector = Icons.Default.SkipPrevious,
-                        contentDescription = "Previous",
+                        contentDescription = "Restart",
                         tint = Color.White,
                         modifier = Modifier.size(40.dp)
                     )
@@ -252,4 +271,3 @@ private fun formatTime(seconds: Int): String {
     val secs = seconds % 60
     return String.format(Locale.getDefault(), "%d:%02d", mins, secs)
 }
-

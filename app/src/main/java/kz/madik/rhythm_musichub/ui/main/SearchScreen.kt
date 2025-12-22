@@ -115,11 +115,13 @@ fun SearchScreen(
                             track = track,
                             onTrackClick = {
                                 val intent = Intent(context, PlayerActivity::class.java).apply {
+                                    putExtra("track_id", track.id)
                                     putExtra("audio_url", track.audioUrl)
                                     putExtra("track_title", track.title)
                                     putExtra("track_artist", track.artist)
                                     putExtra("cover_url", track.coverUrl)
                                     putExtra("track_duration", track.duration)
+                                    putExtra("is_favorite", track.isFavorite)
                                 }
                                 context.startActivity(intent)
                             },
