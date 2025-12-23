@@ -55,7 +55,12 @@ fun SearchScreen(
             .fillMaxSize()
             .background(Color(0xFF121212))
             .padding(padding)
-            .padding(16.dp)
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = 0.dp
+                )
     ) {
         Text(
             text = stringResource(R.string.search_title),
