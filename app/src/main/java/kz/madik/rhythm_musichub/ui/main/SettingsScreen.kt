@@ -33,7 +33,6 @@ fun SettingsScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF121212))
-            .padding(padding)
     ) {
         // Top App Bar
         TopAppBar(
@@ -61,10 +60,11 @@ fun SettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 8.dp)
+                .padding(bottom = padding.calculateBottomPadding())
         ) {
             // Language Section
             item {
+                Spacer(modifier = Modifier.height(8.dp))
                 SettingsSectionHeader(title = stringResource(R.string.settings_language))
             }
 
