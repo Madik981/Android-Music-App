@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
@@ -31,8 +30,7 @@ import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 @Composable
 fun LibraryScreen(
     padding: PaddingValues,
-    viewModel: MusicViewModel,
-    @Suppress("UNUSED_PARAMETER") navController: NavController
+    viewModel: MusicViewModel
 ) {
     val context = LocalContext.current
     val favoriteTracks by viewModel.favoriteTracks.collectAsState()

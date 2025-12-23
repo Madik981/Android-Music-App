@@ -23,24 +23,21 @@ fun NavGraph(
         composable(route = Screen.Home.route) {
             HomeScreen(
                 padding = innerPadding,
-                viewModel = viewModel,
-                navController = navController
+                viewModel = viewModel
             )
         }
 
         composable(route = Screen.Search.route) {
             SearchScreen(
                 padding = innerPadding,
-                viewModel = viewModel,
-                navController = navController
+                viewModel = viewModel
             )
         }
 
         composable(route = Screen.Library.route) {
             LibraryScreen(
                 padding = innerPadding,
-                viewModel = viewModel,
-                navController = navController
+                viewModel = viewModel
             )
         }
 

@@ -24,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kz.madik.rhythm_musichub.PlayerActivity
@@ -35,8 +34,7 @@ import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 @Composable
 fun SearchScreen(
     padding: PaddingValues,
-    viewModel: MusicViewModel,
-    @Suppress("UNUSED_PARAMETER") navController: NavController
+    viewModel: MusicViewModel
 ) {
     val context = LocalContext.current
     var query by remember { mutableStateOf("") }
