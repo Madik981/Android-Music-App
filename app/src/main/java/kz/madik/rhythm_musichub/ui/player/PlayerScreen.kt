@@ -44,6 +44,9 @@ fun PlayerScreen(
     var currentProgress by remember { mutableFloatStateOf(0f) }
     var currentPosition by remember { mutableIntStateOf(0) }
 
+    // Определяем, темная ли тема
+    val isDarkTheme = MaterialTheme.colorScheme.background == Color(0xFF121212)
+
     // Update progress from ExoPlayer
     LaunchedEffect(player) {
         while (isActive && player != null) {
@@ -60,13 +63,23 @@ fun PlayerScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF282828),
-                        Color(0xFF121212),
-                        Color(0xFF000000)
+                if (isDarkTheme) {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF282828),
+                            Color(0xFF121212),
+                            Color(0xFF000000)
+                        )
                     )
-                )
+                } else {
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFF6F6F6),
+                            Color(0xFFFFFFFF),
+                            Color(0xFFFFFFFF)
+                        )
+                    )
+                }
             )
             .statusBarsPadding()
     ) {
@@ -86,7 +99,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -95,7 +108,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.Default.MoreVert,
                         contentDescription = "More",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -125,7 +138,7 @@ fun PlayerScreen(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = trackTitle,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
                         maxLines = 1,
@@ -134,7 +147,7 @@ fun PlayerScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = trackArtist,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodyLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -158,7 +171,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = if (isFavorite) Color(0xFF1DB954) else Color.White,
+                        tint = if (isFavorite) Color(0xFF1DB954) else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -176,9 +189,9 @@ fun PlayerScreen(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = SliderDefaults.colors(
-                        thumbColor = Color.White,
-                        activeTrackColor = Color.White,
-                        inactiveTrackColor = Color.Gray
+                        thumbColor = if (isDarkTheme) Color.White else Color(0xFF1DB954),
+                        activeTrackColor = if (isDarkTheme) Color.White else Color(0xFF1DB954),
+                        inactiveTrackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
                     )
                 )
                 Row(
@@ -187,12 +200,12 @@ fun PlayerScreen(
                 ) {
                     Text(
                         text = formatTime(currentPosition),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodySmall
                     )
                     Text(
                         text = formatTime(trackDuration),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -210,7 +223,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.Default.Shuffle,
                         contentDescription = "Shuffle",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         modifier = Modifier.size(28.dp)
                     )
                 }
@@ -221,7 +234,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.Default.SkipPrevious,
                         contentDescription = "Restart",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(40.dp)
                     )
                 }
@@ -236,12 +249,15 @@ fun PlayerScreen(
                     },
                     modifier = Modifier
                         .size(72.dp)
-                        .background(Color.White, CircleShape)
+                        .background(
+                            if (isDarkTheme) Color.White else Color(0xFF1DB954),
+                            CircleShape
+                        )
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
                         contentDescription = if (isPlaying) "Pause" else "Play",
-                        tint = Color.Black,
+                        tint = if (isDarkTheme) Color.Black else Color.White,
                         modifier = Modifier.size(36.dp)
                     )
                 }
@@ -250,7 +266,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.Default.SkipNext,
                         contentDescription = "Next",
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(40.dp)
                     )
                 }
@@ -259,7 +275,7 @@ fun PlayerScreen(
                     Icon(
                         imageVector = Icons.Default.Repeat,
                         contentDescription = "Repeat",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         modifier = Modifier.size(28.dp)
                     )
                 }

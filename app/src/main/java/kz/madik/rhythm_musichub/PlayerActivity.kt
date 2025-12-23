@@ -5,12 +5,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import kz.madik.rhythm_musichub.ui.player.PlayerScreen
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
 import kz.madik.rhythm_musichub.utils.LocaleHelper
+import kz.madik.rhythm_musichub.utils.ThemeHelper
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 class PlayerActivity : ComponentActivity() {
@@ -46,7 +50,17 @@ class PlayerActivity : ComponentActivity() {
         }
 
         setContent {
-            Rhythm_MusicHubTheme {
+            val context = LocalContext.current
+            val themePreference = remember { ThemeHelper.getTheme(context) }
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+
+            val darkTheme = when (themePreference) {
+                ThemeHelper.THEME_LIGHT -> false
+                ThemeHelper.THEME_DARK -> true
+                else -> isSystemInDarkTheme // THEME_SYSTEM
+            }
+
+            Rhythm_MusicHubTheme(darkTheme = darkTheme) {
                 PlayerScreen(
                     onBack = { finish() },
                     trackId = trackId,
