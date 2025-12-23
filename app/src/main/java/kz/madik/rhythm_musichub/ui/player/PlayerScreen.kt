@@ -74,7 +74,7 @@ fun PlayerScreen(
                 } else {
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFFF6F6F6),
+                            Color(0xFFCBCBCB),
                             Color(0xFFFFFFFF),
                             Color(0xFFFFFFFF)
                         )
