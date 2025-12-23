@@ -51,7 +51,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212))
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding)
             .padding(
                 start = 16.dp,
@@ -62,7 +62,7 @@ fun SearchScreen(
     ) {
         Text(
             text = stringResource(R.string.search_title),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -81,7 +81,7 @@ fun SearchScreen(
             query.isBlank() -> {
                 Text(
                     text = stringResource(R.string.search_browse_all),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -103,7 +103,7 @@ fun SearchScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.search_no_results),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -150,14 +150,14 @@ fun SearchBar(
         placeholder = {
             Text(
                 text = stringResource(R.string.search_hint),
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search",
-                tint = Color.Gray
+                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             )
         },
         trailingIcon = {
@@ -166,7 +166,7 @@ fun SearchBar(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Clear",
-                        tint = Color.Gray
+                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                     )
                 }
             }
@@ -174,10 +174,10 @@ fun SearchBar(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color(0xFF282828),
-            focusedContainerColor = Color(0xFF282828),
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
             focusedBorderColor = Color(0xFF1DB954),
             unfocusedBorderColor = Color.Transparent
         ),
@@ -212,14 +212,14 @@ fun SearchResultRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = track.title,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = track.artist,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -230,7 +230,7 @@ fun SearchResultRow(
             Icon(
                 imageVector = if (track.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "Favorite",
-                tint = if (track.isFavorite) Color(0xFF1DB954) else Color.Gray
+                tint = if (track.isFavorite) Color(0xFF1DB954) else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             )
         }
     }
