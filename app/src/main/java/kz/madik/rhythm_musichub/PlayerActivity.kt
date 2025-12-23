@@ -34,6 +34,7 @@ class PlayerActivity : ComponentActivity() {
             ?: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
         val trackTitle = intent.getStringExtra("track_title") ?: "Demo Track"
         val trackArtist = intent.getStringExtra("track_artist") ?: "Unknown Artist"
+        val trackAlbum = intent.getStringExtra("track_album") ?: "Unknown Album"
         val coverUrl = intent.getStringExtra("cover_url")
         val trackDuration = intent.getLongExtra("track_duration", 180L)
         val isFavorite = intent.getBooleanExtra("is_favorite", false)
@@ -51,6 +52,7 @@ class PlayerActivity : ComponentActivity() {
                     trackId = trackId,
                     trackTitle = trackTitle,
                     trackArtist = trackArtist,
+                    trackAlbum = trackAlbum,
                     coverUrl = coverUrl,
                     trackDuration = trackDuration.toInt(),
                     initialIsFavorite = isFavorite,

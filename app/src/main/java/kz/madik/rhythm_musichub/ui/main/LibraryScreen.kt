@@ -120,6 +120,7 @@ fun LibraryScreen(
                                 putExtra("audio_url", track.audioUrl)
                                 putExtra("track_title", track.title)
                                 putExtra("track_artist", track.artist)
+                                putExtra("track_album", track.album)
                                 putExtra("cover_url", track.coverUrl)
                                 putExtra("track_duration", track.duration)
                                 putExtra("is_favorite", track.isFavorite)

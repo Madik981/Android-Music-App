@@ -61,9 +61,9 @@ fun Rhythm_MusicHubTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // Делаем status bar темнее фона приложения для контраста
-            window.statusBarColor = Color(0xFF000000).toArgb()
-            // Делаем navigation bar такого же цвета
+            // Делаем status bar полностью прозрачным для edge-to-edge дизайна
+            window.statusBarColor = android.graphics.Color.TRANSPARENT
+            // Делаем navigation bar такого же цвета как bottom bar
             window.navigationBarColor = Color(0xFF1E1E1E).toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }

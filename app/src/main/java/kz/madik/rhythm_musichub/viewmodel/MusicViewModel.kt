@@ -109,12 +109,10 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
             repository.insertTrack(updatedTrack)
             loadFavoriteTracks()
 
-            // Обновляем трек в списке результатов поиска
             _searchResults.value = _searchResults.value.map {
                 if (it.id == track.id) updatedTrack else it
             }
 
-            // Обновляем трек в списке чартов
             _chartTracks.value = _chartTracks.value.map {
                 if (it.id == track.id) updatedTrack else it
             }
