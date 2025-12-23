@@ -14,10 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import kz.madik.rhythm_musichub.ui.main.HomeScreen
-import kz.madik.rhythm_musichub.ui.main.LibraryScreen
-import kz.madik.rhythm_musichub.ui.main.SearchScreen
+import kz.madik.rhythm_musichub.navigation.NavGraph
+import kz.madik.rhythm_musichub.navigation.Screen
+import kz.madik.rhythm_musichub.navigation.navigateToHome
+import kz.madik.rhythm_musichub.navigation.navigateToLibrary
+import kz.madik.rhythm_musichub.navigation.navigateToSearch
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
 import kz.madik.rhythm_musichub.utils.LocaleHelper
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
@@ -41,69 +44,75 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MusicHubApp() {
-    var selectedTab by remember { mutableIntStateOf(0) }
     val navController = rememberNavController()
     val viewModel: MusicViewModel = viewModel()
+
+    // Отслеживаем текущий маршрут для правильного отображения выбранной вкладки
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         containerColor = Color(0xFF121212),
         bottomBar = {
-            NavigationBar(containerColor = Color(0xFF1E1E1E)) {
+            // Показываем навигационную панель только на основных экранах
+            if (currentRoute in listOf(Screen.Home.route, Screen.Search.route, Screen.Library.route)) {
+                NavigationBar(containerColor = Color(0xFF1E1E1E)) {
 
-                NavigationBarItem(
-                    selected = selectedTab == 0,
-                    onClick = { selectedTab = 0 },
-                    icon = {
-                        Icon(Icons.Filled.Home, contentDescription = "Home")
-                    },
-                    label = { Text(stringResource(R.string.nav_home)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF1DB954),
-                        selectedTextColor = Color(0xFF1DB954),
-                        unselectedIconColor = Color.Gray,
-                        unselectedTextColor = Color.Gray,
-                        indicatorColor = Color.Transparent
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.Home.route,
+                        onClick = { navController.navigateToHome() },
+                        icon = {
+                            Icon(Icons.Filled.Home, contentDescription = "Home")
+                        },
+                        label = { Text(stringResource(R.string.nav_home)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF1DB954),
+                            selectedTextColor = Color(0xFF1DB954),
+                            unselectedIconColor = Color.Gray,
+                            unselectedTextColor = Color.Gray,
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
 
-                NavigationBarItem(
-                    selected = selectedTab == 1,
-                    onClick = { selectedTab = 1 },
-                    icon = {
-                        Icon(Icons.Filled.Search, contentDescription = "Search")
-                    },
-                    label = { Text(stringResource(R.string.nav_search)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF1DB954),
-                        selectedTextColor = Color(0xFF1DB954),
-                        unselectedIconColor = Color.Gray,
-                        unselectedTextColor = Color.Gray,
-                        indicatorColor = Color.Transparent
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.Search.route,
+                        onClick = { navController.navigateToSearch() },
+                        icon = {
+                            Icon(Icons.Filled.Search, contentDescription = "Search")
+                        },
+                        label = { Text(stringResource(R.string.nav_search)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF1DB954),
+                            selectedTextColor = Color(0xFF1DB954),
+                            unselectedIconColor = Color.Gray,
+                            unselectedTextColor = Color.Gray,
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
 
-                NavigationBarItem(
-                    selected = selectedTab == 2,
-                    onClick = { selectedTab = 2 },
-                    icon = {
-                        Icon(Icons.Filled.Favorite, contentDescription = "Library")
-                    },
-                    label = { Text(stringResource(R.string.nav_library)) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF1DB954),
-                        selectedTextColor = Color(0xFF1DB954),
-                        unselectedIconColor = Color.Gray,
-                        unselectedTextColor = Color.Gray,
-                        indicatorColor = Color.Transparent
+                    NavigationBarItem(
+                        selected = currentRoute == Screen.Library.route,
+                        onClick = { navController.navigateToLibrary() },
+                        icon = {
+                            Icon(Icons.Filled.Favorite, contentDescription = "Library")
+                        },
+                        label = { Text(stringResource(R.string.nav_library)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Color(0xFF1DB954),
+                            selectedTextColor = Color(0xFF1DB954),
+                            unselectedIconColor = Color.Gray,
+                            unselectedTextColor = Color.Gray,
+                            indicatorColor = Color.Transparent
+                        )
                     )
-                )
+                }
             }
         }
     ) { innerPadding ->
-        when (selectedTab) {
-            0 -> HomeScreen(innerPadding, viewModel, navController)
-            1 -> SearchScreen(innerPadding, viewModel, navController)
-            2 -> LibraryScreen(innerPadding, viewModel, navController)
-        }
+        NavGraph(
+            navController = navController,
+            innerPadding = innerPadding,
+            viewModel = viewModel
+        )
     }
 }
