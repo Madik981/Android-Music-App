@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import kz.madik.rhythm_musichub.ui.main.HomeScreen
 import kz.madik.rhythm_musichub.ui.main.LibraryScreen
 import kz.madik.rhythm_musichub.ui.main.SearchScreen
+import kz.madik.rhythm_musichub.ui.main.SettingsScreen
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 @Composable
@@ -23,7 +24,8 @@ fun NavGraph(
         composable(route = Screen.Home.route) {
             HomeScreen(
                 padding = innerPadding,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navController = navController
             )
         }
 
@@ -42,7 +44,10 @@ fun NavGraph(
         }
 
         composable(route = Screen.Settings.route) {
-            // Settings screen can be implemented later
+            SettingsScreen(
+                padding = innerPadding,
+                navController = navController
+            )
         }
     }
 }

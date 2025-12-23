@@ -16,10 +16,15 @@
     <string name="home_settings">Баптаулар</string>
 
     <!-- Settings -->
+    <string name="settings_title">Баптаулар</string>
+    <string name="settings_back">Артқа</string>
     <string name="settings_language">Тіл</string>
     <string name="settings_language_english">English</string>
     <string name="settings_language_russian">Русский</string>
     <string name="settings_language_kazakh">Қазақша</string>
+    <string name="settings_theme">Тақырып</string>
+    <string name="settings_theme_dark">Қараңғы режим</string>
+    <string name="settings_theme_coming_soon">Жақында пайда болады</string>
 
     <!-- Search Screen -->
     <string name="search_title">Іздеу</string>
@@ -50,4 +55,8 @@
     <string name="error_network">Желі қатесі. Интернет байланысын тексеріңіз.</string>
     <string name="error_generic">Бірдеңе дұрыс болмады. Қайталап көріңіз.</string>
     <string name="retry">Қайталау</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_image_description">%1$s үшін мұқаба суреті</string>
+    <string name="cd_favorite_icon">Таңдаулы белгі</string>
 </resources>

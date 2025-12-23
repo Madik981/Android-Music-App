@@ -16,10 +16,15 @@
     <string name="home_settings">Настройки</string>
 
     <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_back">Назад</string>
     <string name="settings_language">Язык</string>
     <string name="settings_language_english">English</string>
     <string name="settings_language_russian">Русский</string>
     <string name="settings_language_kazakh">Қазақша</string>
+    <string name="settings_theme">Тема</string>
+    <string name="settings_theme_dark">Темная тема</string>
+    <string name="settings_theme_coming_soon">Скоро появится</string>
 
     <!-- Search Screen -->
     <string name="search_title">Поиск</string>
@@ -50,4 +55,8 @@
     <string name="error_network">Ошибка сети. Проверьте подключение к интернету.</string>
     <string name="error_generic">Что-то пошло не так. Попробуйте снова.</string>
     <string name="retry">Повторить</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_image_description">Обложка для %1$s</string>
+    <string name="cd_favorite_icon">Иконка избранного</string>
 </resources>

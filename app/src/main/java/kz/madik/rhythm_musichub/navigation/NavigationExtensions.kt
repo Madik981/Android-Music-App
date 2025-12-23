@@ -46,3 +46,9 @@ fun NavController.navigateToLibrary() {
     }
 }
 
+/**
+ * Навигация на экран настроек
+ */
+fun NavController.navigateToSettings() {
+    navigate(Screen.Settings.route)
+}
