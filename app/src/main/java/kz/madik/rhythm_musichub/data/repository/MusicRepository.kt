@@ -11,23 +11,10 @@ class MusicRepository(
     private val apiService: DeezerApiService
 ) {
 
-    // Local Database operations
-    fun getAllTracks(): Flow<List<TrackEntity>> = trackDao.getAllTracks()
-
     fun getFavoriteTracks(): Flow<List<TrackEntity>> = trackDao.getFavoriteTracks()
-
-    fun searchTracksLocal(query: String): Flow<List<TrackEntity>> = trackDao.searchTracks(query)
-
-    suspend fun getTrackById(trackId: String): TrackEntity? = trackDao.getTrackById(trackId)
 
     suspend fun insertTrack(track: TrackEntity) = trackDao.insertTrack(track)
 
-    suspend fun updateFavorite(trackId: String, isFavorite: Boolean) =
-        trackDao.updateFavorite(trackId, isFavorite)
-
-    suspend fun deleteTrack(track: TrackEntity) = trackDao.deleteTrack(track)
-
-    // API operations
     suspend fun fetchChartTracks(): Result<List<TrackResponse>> {
         return try {
             val response = apiService.getChart()
@@ -46,7 +33,6 @@ class MusicRepository(
         }
     }
 
-    // Convert API model to Entity
     suspend fun TrackResponse.toEntity(): TrackEntity {
         val trackId = this.id.toString()
         val existingTrack = trackDao.getTrackById(trackId)

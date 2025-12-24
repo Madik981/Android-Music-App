@@ -34,7 +34,7 @@ fun SearchScreen(
 
     LaunchedEffect(query) {
         if (query.isNotBlank()) {
-            delay(500) // Debounce
+            delay(500)
             viewModel.searchTracks(query)
         }
     }

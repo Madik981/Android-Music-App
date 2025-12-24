@@ -64,14 +64,12 @@ fun Rhythm_MusicHubTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = android.graphics.Color.TRANSPARENT
 
-            // Устанавливаем цвет navigation bar в зависимости от темы
             window.navigationBarColor = if (darkTheme) {
                 DarkSurface.toArgb()
             } else {
                 Color.White.toArgb()
             }
 
-            // Устанавливаем светлые/темные иконки в status bar в зависимости от темы
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
             WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
         }

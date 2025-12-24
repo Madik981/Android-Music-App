@@ -47,7 +47,6 @@ fun SettingsScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Top App Bar
         TopAppBar(
             title = {
                 Text(
@@ -75,13 +74,11 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(bottom = padding.calculateBottomPadding())
         ) {
-            // Theme Section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 SettingsSectionHeader(title = stringResource(R.string.settings_theme))
             }
 
-            // Dark Theme
             item {
                 ThemeItem(
                     themeName = stringResource(R.string.settings_theme_dark),
@@ -93,7 +90,6 @@ fun SettingsScreen(
                 )
             }
 
-            // Light Theme
             item {
                 ThemeItem(
                     themeName = stringResource(R.string.settings_theme_light),
@@ -105,7 +101,6 @@ fun SettingsScreen(
                 )
             }
 
-            // System Theme
             item {
                 ThemeItem(
                     themeName = stringResource(R.string.settings_theme_system),
@@ -121,12 +116,10 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // Language Section
             item {
                 SettingsSectionHeader(title = stringResource(R.string.settings_language))
             }
 
-            // English
             item {
                 LanguageItem(
                     languageName = stringResource(R.string.settings_language_english),
@@ -138,7 +131,6 @@ fun SettingsScreen(
                 )
             }
 
-            // Russian
             item {
                 LanguageItem(
                     languageName = stringResource(R.string.settings_language_russian),
@@ -150,7 +142,6 @@ fun SettingsScreen(
                 )
             }
 
-            // Kazakh
             item {
                 LanguageItem(
                     languageName = stringResource(R.string.settings_language_kazakh),

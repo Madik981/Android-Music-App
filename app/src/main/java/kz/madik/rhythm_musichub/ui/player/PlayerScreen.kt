@@ -32,10 +32,8 @@ fun PlayerScreen(
     var currentProgress by remember { mutableFloatStateOf(0f) }
     var currentPosition by remember { mutableIntStateOf(0) }
 
-    // Определяем, темная ли тема
     val isDarkTheme = MaterialTheme.colorScheme.background == Color(0xFF121212)
 
-    // Update progress from ExoPlayer
     LaunchedEffect(player) {
         while (isActive && player != null) {
             currentPosition = (player.currentPosition / 1000).toInt()

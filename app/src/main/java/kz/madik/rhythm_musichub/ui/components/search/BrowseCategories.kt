@@ -43,7 +43,7 @@ fun BrowseCategories() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
-                    .clickable { /* Handle category click */ },
+                    .clickable {},
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = color)
             ) {

@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
             val darkTheme = when (themePreference) {
                 ThemeHelper.THEME_LIGHT -> false
                 ThemeHelper.THEME_DARK -> true
-                else -> isSystemInDarkTheme // THEME_SYSTEM
+                else -> isSystemInDarkTheme
             }
 
             Rhythm_MusicHubTheme(darkTheme = darkTheme) {
@@ -60,14 +60,12 @@ fun MusicHubApp() {
     val navController = rememberNavController()
     val viewModel: MusicViewModel = viewModel()
 
-    // Отслеживаем текущий маршрут для правильного отображения выбранной вкладки
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            // Показываем навигационную панель только на основных экранах
             if (currentRoute in listOf(Screen.Home.route, Screen.Search.route, Screen.Library.route)) {
                 NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
 

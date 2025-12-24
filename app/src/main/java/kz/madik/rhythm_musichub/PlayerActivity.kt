@@ -57,7 +57,7 @@ class PlayerActivity : ComponentActivity() {
             val darkTheme = when (themePreference) {
                 ThemeHelper.THEME_LIGHT -> false
                 ThemeHelper.THEME_DARK -> true
-                else -> isSystemInDarkTheme // THEME_SYSTEM
+                else -> isSystemInDarkTheme
             }
 
             Rhythm_MusicHubTheme(darkTheme = darkTheme) {

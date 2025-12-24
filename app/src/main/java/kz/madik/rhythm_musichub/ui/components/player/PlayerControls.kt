@@ -16,14 +16,14 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PlayerControls(
+    modifier: Modifier = Modifier,
     isPlaying: Boolean,
     isDarkTheme: Boolean,
     onShuffleClick: () -> Unit = {},
     onPreviousClick: () -> Unit,
     onPlayPauseClick: () -> Unit,
     onNextClick: () -> Unit = {},
-    onRepeatClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onRepeatClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
