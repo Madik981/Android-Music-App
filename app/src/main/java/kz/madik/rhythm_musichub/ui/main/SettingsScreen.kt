@@ -1,15 +1,24 @@
 package kz.madik.rhythm_musichub.ui.main
 
+import android.app.Activity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -17,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kz.madik.rhythm_musichub.R
+import kz.madik.rhythm_musichub.ui.components.settings.LanguageItem
+import kz.madik.rhythm_musichub.ui.components.settings.SettingsSectionHeader
+import kz.madik.rhythm_musichub.ui.components.settings.ThemeItem
 import kz.madik.rhythm_musichub.utils.LocaleHelper
 import kz.madik.rhythm_musichub.utils.ThemeHelper
 
@@ -76,7 +88,7 @@ fun SettingsScreen(
                     isSelected = currentTheme == ThemeHelper.THEME_DARK,
                     onClick = {
                         ThemeHelper.setTheme(context, ThemeHelper.THEME_DARK)
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
@@ -88,7 +100,7 @@ fun SettingsScreen(
                     isSelected = currentTheme == ThemeHelper.THEME_LIGHT,
                     onClick = {
                         ThemeHelper.setTheme(context, ThemeHelper.THEME_LIGHT)
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
@@ -100,7 +112,7 @@ fun SettingsScreen(
                     isSelected = currentTheme == ThemeHelper.THEME_SYSTEM,
                     onClick = {
                         ThemeHelper.setTheme(context, ThemeHelper.THEME_SYSTEM)
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
@@ -121,7 +133,7 @@ fun SettingsScreen(
                     isSelected = currentLanguage == "en",
                     onClick = {
                         LocaleHelper.setLocale(context, "en")
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
@@ -133,7 +145,7 @@ fun SettingsScreen(
                     isSelected = currentLanguage == "ru",
                     onClick = {
                         LocaleHelper.setLocale(context, "ru")
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
@@ -145,126 +157,13 @@ fun SettingsScreen(
                     isSelected = currentLanguage == "kk",
                     onClick = {
                         LocaleHelper.setLocale(context, "kk")
-                        (context as? android.app.Activity)?.recreate()
+                        (context as? Activity)?.recreate()
                     }
                 )
             }
 
             item {
                 Spacer(modifier = Modifier.height(80.dp))
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsSectionHeader(title: String) {
-    Text(
-        text = title,
-        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-        style = MaterialTheme.typography.labelMedium,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-    )
-}
-
-@Composable
-fun ThemeItem(
-    themeName: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .background(if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = themeName,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
-            )
-        }
-
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Selected",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun LanguageItem(
-    languageName: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .background(if (isSelected) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = languageName,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
-            )
-        }
-
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Selected",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun SettingsItem(
-    title: String,
-    subtitle: String? = null,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (subtitle != null) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = subtitle,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    style = MaterialTheme.typography.bodySmall
-                )
             }
         }
     }

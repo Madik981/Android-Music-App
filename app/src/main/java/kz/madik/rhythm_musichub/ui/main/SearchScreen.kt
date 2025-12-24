@@ -2,33 +2,24 @@ package kz.madik.rhythm_musichub.ui.main
 
 import android.content.Intent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
-import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.ui.components.search.BrowseCategories
+import kz.madik.rhythm_musichub.ui.components.search.SearchResultRow
+import kz.madik.rhythm_musichub.ui.components.search.SearchBar
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 @Composable
@@ -132,147 +123,6 @@ fun SearchScreen(
                             onFavoriteClick = { viewModel.toggleFavorite(track) }
                         )
                     }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SearchBar(
-    value: String,
-    onValueChange: (String) -> Unit,
-    onClear: () -> Unit
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = {
-            Text(
-                text = stringResource(R.string.search_hint),
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search",
-                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
-        },
-        trailingIcon = {
-            if (value.isNotEmpty()) {
-                IconButton(onClick = onClear) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Clear",
-                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    )
-                }
-            }
-        },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            focusedTextColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-            focusedBorderColor = Color(0xFF1DB954),
-            unfocusedBorderColor = Color.Transparent
-        ),
-        singleLine = true
-    )
-}
-
-@Composable
-fun SearchResultRow(
-    track: TrackEntity,
-    onTrackClick: () -> Unit,
-    onFavoriteClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onTrackClick() }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = track.coverUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = track.title,
-                color = MaterialTheme.colorScheme.onBackground,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = track.artist,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        IconButton(onClick = onFavoriteClick) {
-            Icon(
-                imageVector = if (track.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Favorite",
-                tint = if (track.isFavorite) Color(0xFF1DB954) else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
-        }
-    }
-}
-
-@Composable
-fun BrowseCategories() {
-    val categories = listOf(
-        "Pop" to Color(0xFFE13300),
-        "Hip-Hop" to Color(0xFFBA5D07),
-        "Rock" to Color(0xFF8D67AB),
-        "Jazz" to Color(0xFF1E3264),
-        "Electronic" to Color(0xFF0D73EC),
-        "Classical" to Color(0xFF477D95)
-    )
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 80.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(categories) { (title, color) ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .clickable { /* Handle category click */ },
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = color)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.TopStart
-                ) {
-                    Text(
-                        text = title,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleLarge
-                    )
                 }
             }
         }
