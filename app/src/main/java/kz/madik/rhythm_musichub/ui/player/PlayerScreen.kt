@@ -1,30 +1,18 @@
 package kz.madik.rhythm_musichub.ui.player
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.media3.exoplayer.ExoPlayer
-import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.ui.components.player.*
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
-import java.util.Locale
 
 @Composable
 fun PlayerScreen(
@@ -59,102 +47,26 @@ fun PlayerScreen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                if (isDarkTheme) {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF282828),
-                            Color(0xFF121212),
-                            Color(0xFF000000)
-                        )
-                    )
-                } else {
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFCBCBCB),
-                            Color(0xFFFFFFFF),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                }
-            )
-            .statusBarsPadding()
-    ) {
+    PlayerBackground(isDarkTheme = isDarkTheme) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Top Bar
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onBack) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-
-                IconButton(onClick = { /* More options */ }) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "More",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
+            PlayerTopBar(onBack = onBack)
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // Album Art
-            AsyncImage(
-                model = coverUrl,
-                contentDescription = "Album Cover",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
-            )
+            PlayerAlbumArt(coverUrl = coverUrl)
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Track Info
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = trackTitle,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = trackArtist,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-
-                IconButton(onClick = {
+            PlayerTrackInfo(
+                trackTitle = trackTitle,
+                trackArtist = trackArtist,
+                isFavorite = isFavorite,
+                onFavoriteClick = {
                     val trackToToggle = TrackEntity(
                         id = trackId,
                         title = trackTitle,
@@ -167,125 +79,38 @@ fun PlayerScreen(
                     )
                     viewModel?.toggleFavorite(trackToToggle)
                     isFavorite = !isFavorite
-                }) {
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = if (isFavorite) Color(0xFF1DB954) else MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        modifier = Modifier.size(28.dp)
-                    )
                 }
-            }
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Progress Bar
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Slider(
-                    value = currentProgress,
-                    onValueChange = { newProgress ->
-                        currentProgress = newProgress
-                        player?.seekTo((newProgress * trackDuration * 1000).toLong())
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = SliderDefaults.colors(
-                        thumbColor = if (isDarkTheme) Color.White else Color(0xFF1DB954),
-                        activeTrackColor = if (isDarkTheme) Color.White else Color(0xFF1DB954),
-                        inactiveTrackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
-                    )
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = formatTime(currentPosition),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                    Text(
-                        text = formatTime(trackDuration),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+            PlayerProgressBar(
+                currentProgress = currentProgress,
+                currentPosition = currentPosition,
+                trackDuration = trackDuration,
+                isDarkTheme = isDarkTheme,
+                onProgressChange = { newProgress ->
+                    currentProgress = newProgress
+                    player?.seekTo((newProgress * trackDuration * 1000).toLong())
                 }
-            }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Controls
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { /* Shuffle */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Shuffle,
-                        contentDescription = "Shuffle",
-                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-
-                IconButton(onClick = {
+            PlayerControls(
+                isPlaying = isPlaying,
+                isDarkTheme = isDarkTheme,
+                onPreviousClick = {
                     player?.seekTo(0)
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.SkipPrevious,
-                        contentDescription = "Restart",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(40.dp)
-                    )
+                },
+                onPlayPauseClick = {
+                    if (player?.isPlaying == true) {
+                        player.pause()
+                    } else {
+                        player?.play()
+                    }
                 }
-
-                IconButton(
-                    onClick = {
-                        if (player?.isPlaying == true) {
-                            player.pause()
-                        } else {
-                            player?.play()
-                        }
-                    },
-                    modifier = Modifier
-                        .size(72.dp)
-                        .background(
-                            if (isDarkTheme) Color.White else Color(0xFF1DB954),
-                            CircleShape
-                        )
-                ) {
-                    Icon(
-                        imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (isPlaying) "Pause" else "Play",
-                        tint = if (isDarkTheme) Color.Black else Color.White,
-                        modifier = Modifier.size(36.dp)
-                    )
-                }
-
-                IconButton(onClick = { /* Next */ }) {
-                    Icon(
-                        imageVector = Icons.Default.SkipNext,
-                        contentDescription = "Next",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-
-                IconButton(onClick = { /* Repeat */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Repeat,
-                        contentDescription = "Repeat",
-                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
+            )
         }
     }
-}
-
-private fun formatTime(seconds: Int): String {
-    val mins = seconds / 60
-    val secs = seconds % 60
-    return String.format(Locale.getDefault(), "%d:%02d", mins, secs)
 }

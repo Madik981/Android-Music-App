@@ -1,0 +1,10 @@
+package kz.madik.rhythm_musichub.utils
+
+import java.util.Locale
+
+fun formatTime(seconds: Int): String {
+    val mins = seconds / 60
+    val secs = seconds % 60
+    return String.format(Locale.getDefault(), "%d:%02d", mins, secs)
+}
+
