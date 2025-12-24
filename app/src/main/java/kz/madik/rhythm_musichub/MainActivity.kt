@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,6 +25,7 @@ import kz.madik.rhythm_musichub.navigation.navigateToLibrary
 import kz.madik.rhythm_musichub.navigation.navigateToSearch
 import kz.madik.rhythm_musichub.ui.theme.Rhythm_MusicHubTheme
 import kz.madik.rhythm_musichub.utils.LocaleHelper
+import kz.madik.rhythm_musichub.utils.ThemeHelper
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +38,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Rhythm_MusicHubTheme {
+            val context = LocalContext.current
+            val themePreference = remember { ThemeHelper.getTheme(context) }
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+
+            val darkTheme = when (themePreference) {
+                ThemeHelper.THEME_LIGHT -> false
+                ThemeHelper.THEME_DARK -> true
+                else -> isSystemInDarkTheme // THEME_SYSTEM
+            }
+
+            Rhythm_MusicHubTheme(darkTheme = darkTheme) {
                 MusicHubApp()
             }
         }
@@ -52,11 +65,11 @@ fun MusicHubApp() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        containerColor = Color(0xFF121212),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             // Показываем навигационную панель только на основных экранах
             if (currentRoute in listOf(Screen.Home.route, Screen.Search.route, Screen.Library.route)) {
-                NavigationBar(containerColor = Color(0xFF1E1E1E)) {
+                NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
 
                     NavigationBarItem(
                         selected = currentRoute == Screen.Home.route,

@@ -50,6 +50,8 @@ import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
 import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
 import kz.madik.rhythm_musichub.navigation.navigateToSettings
+import kz.madik.rhythm_musichub.ui.components.home.TrackRow
+import kz.madik.rhythm_musichub.ui.components.home.getGreeting
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 import java.util.Calendar
 
@@ -67,7 +69,7 @@ fun HomeScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212))
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding)
             .padding(horizontal = 16.dp)
     ) {
@@ -80,7 +82,7 @@ fun HomeScreen(
             ) {
                 Text(
                     text = getGreeting(),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
@@ -103,7 +105,7 @@ fun HomeScreen(
         item {
             Text(
                 text = stringResource(R.string.home_charts),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -129,7 +131,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF282828))
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -137,7 +139,7 @@ fun HomeScreen(
                     ) {
                         Text(
                             text = errorMessage ?: "",
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -177,76 +179,5 @@ fun HomeScreen(
         item {
             Spacer(modifier = Modifier.height(80.dp))
         }
-    }
-}
-
-@Composable
-fun TrackRow(
-    track: TrackEntity,
-    onTrackClick: () -> Unit,
-    onFavoriteClick: () -> Unit
-) {
-    val isFavorite = track.isFavorite
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onTrackClick)
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = track.coverUrl,
-            contentDescription = stringResource(R.string.cd_image_description, track.title),
-            modifier = Modifier
-                .size(64.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = track.title,
-                color = Color.White,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = track.artist,
-                color = Color.White.copy(alpha = 0.7f),
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        IconButton(
-            onClick = onFavoriteClick,
-            modifier = Modifier.size(40.dp)
-        ) {
-            Icon(
-                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = stringResource(R.string.cd_favorite_icon),
-                tint = Color(0xFF1DB954)
-            )
-        }
-    }
-}
-
-@Composable
-fun getGreeting(): String {
-    val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-    return when {
-        hour in 6..11 -> stringResource(R.string.home_greeting_morning)
-        hour in 12..17 -> stringResource(R.string.home_greeting_afternoon)
-        else -> stringResource(R.string.home_greeting_evening)
     }
 }

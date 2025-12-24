@@ -17,33 +17,34 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF1DB954),
-    secondary = Color(0xFF1DB954),
-    tertiary = Color(0xFF1DB954),
-    background = Color(0xFF121212),
-    surface = Color(0xFF1E1E1E)
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = SpotifyGreen,
+    secondary = SpotifyGreen,
+    tertiary = SpotifyGreen,
+    background = DarkBackground,
+    surface = DarkSurface,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    onBackground = Color.White,
+    onSurface = Color.White
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = SpotifyGreen,
+    secondary = SpotifyGreen,
+    tertiary = SpotifyGreen,
+    background = LightBackground,
+    surface = LightSurface,
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = LightTextPrimary,
+    onSurface = LightTextPrimary
 )
 
 @Composable
 fun Rhythm_MusicHubTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Отключаем динамические цвета, чтобы иметь контроль над status bar
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -61,11 +62,18 @@ fun Rhythm_MusicHubTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // Делаем status bar полностью прозрачным для edge-to-edge дизайна
             window.statusBarColor = android.graphics.Color.TRANSPARENT
-            // Делаем navigation bar такого же цвета как bottom bar
-            window.navigationBarColor = Color(0xFF1E1E1E).toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+
+            // Устанавливаем цвет navigation bar в зависимости от темы
+            window.navigationBarColor = if (darkTheme) {
+                DarkSurface.toArgb()
+            } else {
+                Color.White.toArgb()
+            }
+
+            // Устанавливаем светлые/темные иконки в status bar в зависимости от темы
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
         }
     }
 

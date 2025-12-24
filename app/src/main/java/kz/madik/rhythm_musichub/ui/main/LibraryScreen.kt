@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import kz.madik.rhythm_musichub.PlayerActivity
 import kz.madik.rhythm_musichub.R
 import kz.madik.rhythm_musichub.data.db.entities.TrackEntity
+import kz.madik.rhythm_musichub.ui.components.library.LibraryTrackRow
 import kz.madik.rhythm_musichub.viewmodel.MusicViewModel
 
 @Composable
@@ -38,13 +39,13 @@ fun LibraryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212))
+            .background(MaterialTheme.colorScheme.background)
             .padding(padding)
             .padding(16.dp)
     ) {
         Text(
             text = stringResource(R.string.library_title),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -64,18 +65,18 @@ fun LibraryScreen(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
-                        tint = Color.Gray
+                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = stringResource(R.string.library_empty),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(R.string.library_favorites),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -101,7 +102,7 @@ fun LibraryScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(R.string.library_favorites),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -129,57 +130,6 @@ fun LibraryScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun LibraryTrackRow(
-    track: TrackEntity,
-    onTrackClick: () -> Unit,
-    onFavoriteClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onTrackClick() }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = track.coverUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = track.title,
-                color = Color.White,
-                fontWeight = FontWeight.Medium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = track.artist,
-                color = Color.Gray,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        IconButton(onClick = onFavoriteClick) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Remove from favorites",
-                tint = Color(0xFF1DB954)
-            )
         }
     }
 }
